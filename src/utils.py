@@ -39,12 +39,20 @@ def validate_sampling_params(params: Dict[str, Any]) -> Dict[str, Any]:
 
 class JobInput:
     def __init__(self, job):
-        self.llm_input = job.get("messages", job.get("prompt"))
         self.stream = job.get("stream", False)
         self.batch_size = job.get("batch_size", DEFAULT_BATCH_SIZE)
         self.apply_chat_template = job.get("apply_chat_template", False)
         self.use_openai_format = job.get("use_openai_format", False)
         self.validated_sampling_params = validate_sampling_params(job.get("sampling_params", {}))
+        self.task=job.get("task", "chat")
+        if self.task=="chat":
+            self.score=job.get("score", 0)
+            self.character=job.get("character","anabal")
+            self.difficulty = job.get("difficulty", "easy")
+            self.llm_input = job.get("messages", job.get("prompt"))
+            self.ind=job.get("ind",[])
+            self.classifier=job.get("classifier","")
+        self.conv=job.get("conv", "")
         self.request_id = random_uuid()
            
 class DummyRequest:
